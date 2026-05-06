@@ -37,11 +37,9 @@ bias = model.bias.data.item()
 means = scaler.mean_.tolist()
 scales = scaler.scale_.tolist()
 
-print("\n" + "="*30)
-print("COPY AND PASTE THIS INTO YOUR INDEX.HTML")
-print("="*30)
+
 print(f"const weights = {weights};")
 print(f"const bias = {bias};")
 print(f"const means = {means};")
 print(f"const scales = {scales};")
-print("="*30)
+
