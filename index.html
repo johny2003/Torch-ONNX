@@ -3,71 +3,72 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>House Price Predictor</title>
+    <title>AI House Predictor</title>
     <style>
-        body { font-family: -apple-system, sans-serif; display: flex; justify-content: center; padding: 50px; background: #f4f7f6; }
-        .card { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); width: 100%; max-width: 400px; }
-        h2 { margin-top: 0; color: #333; text-align: center; }
-        .input-group { margin-bottom: 15px; }
-        label { display: block; margin-bottom: 5px; font-weight: bold; color: #666; }
-        input { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box; }
-        button { width: 100%; padding: 12px; background: #007bff; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 16px; margin-top: 10px; }
-        button:hover { background: #0056b3; }
-        #result { margin-top: 20px; font-weight: bold; font-size: 1.2em; text-align: center; color: #28a745; min-height: 1.5em; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f0f2f5; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .card { background: white; padding: 2rem; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 100%; max-width: 350px; }
+        h2 { margin-top: 0; color: #1a73e8; text-align: center; }
+        .input-group { margin-bottom: 1rem; }
+        label { display: block; font-size: 0.9rem; margin-bottom: 5px; color: #5f6368; }
+        input { width: 100%; padding: 10px; border: 1px solid #dadce0; border-radius: 8px; box-sizing: border-box; outline: none; }
+        input:focus { border-color: #1a73e8; }
+        button { width: 100%; padding: 12px; background: #1a73e8; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; margin-top: 10px; transition: background 0.3s; }
+        button:hover { background: #1557b0; }
+        #result { margin-top: 20px; text-align: center; font-size: 1.2rem; font-weight: bold; color: #34a853; }
     </style>
-
-    <script>
-        // We define the function here in the head to ensure it's loaded before the button
-        function predict() {
-            console.log("Predict button clicked!"); // This helps us debug
-            
-            try {
-                const x1 = parseFloat(document.getElementById('input1').value) || 0;
-                const x2 = parseFloat(document.getElementById('input2').value) || 0;
-                const x3 = parseFloat(document.getElementById('input3').value) || 0;
-
-                // YOUR MODEL WEIGHTS
-                const weights = [-0.42665982246398926, -0.4126211404800415, 0.36722683906555176];
-                const bias = -0.5763885378837585;
-
-                // The calculation
-                const rawPrediction = (x1 * weights[0]) + (x2 * weights[1]) + (x3 * weights[2]) + bias;
-
-                // Scale factor (Change to 1 if you don't want it in $100ks)
-                const finalPrice = rawPrediction * 100000; 
-
-                document.getElementById('result').innerText = "Estimated Value: $" + finalPrice.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
-            } catch (error) {
-                console.error("Calculation error:", error);
-                document.getElementById('result').innerText = "Error in calculation.";
-            }
-        }
-    </script>
 </head>
 <body>
 
 <div class="card">
-    <h2>Housing Predictor</h2>
+    <h2>Price Estimator</h2>
     
     <div class="input-group">
-        <label for="input1">Median Income (in $10k)</label>
-        <input type="number" id="input1" step="0.1" placeholder="3.5">
+        <label>Median Income (Scale 1-15)</label>
+        <input type="number" id="income" step="0.1" value="3.5">
     </div>
 
     <div class="input-group">
-        <label for="input2">House Age</label>
-        <input type="number" id="input2" placeholder="25">
+        <label>House Age (Years)</label>
+        <input type="number" id="age" value="20">
     </div>
 
     <div class="input-group">
-        <label for="input3">Average Rooms</label>
-        <input type="number" id="input3" step="0.1" placeholder="5.2">
+        <label>Avg Rooms</label>
+        <input type="number" id="rooms" step="0.1" value="5">
     </div>
 
-    <button type="button" onclick="predict()">Calculate Price</button>
+    <button onclick="predict()">Calculate Price</button>
     
     <div id="result"></div>
 </div>
+
+<script>
+    function predict() {
+        // 1. Get raw inputs
+        const x1 = parseFloat(document.getElementById('income').value);
+        const x2 = parseFloat(document.getElementById('age').value);
+        const x3 = parseFloat(document.getElementById('rooms').value);
+
+        const weights = [0.8407686352729797, 0.21172954142093658, -0.06679758429527283];
+        const bias = 2.068455219268799;
+        const means = [3.8706710029069766, 28.639486434108527, 5.428999742190376];
+        const scales = [1.8997756945748738, 12.585252725724606, 2.474113202333516];
+
+        // 2. Standardize Inputs (Manual Z-Score)
+        const z1 = (x1 - means[0]) / scales[0];
+        const z2 = (x2 - means[1]) / scales[1];
+        const z3 = (x3 - means[2]) / scales[2];
+
+        // 3. Model Prediction
+        const prediction = (z1 * weights[0]) + (z2 * weights[1]) + (z3 * weights[2]) + bias;
+
+        // 4. Formatting (Dataset is in $100k units)
+        const finalPrice = prediction * 100000;
+
+        document.getElementById('result').innerText = 
+            "Est. Value: $" + finalPrice.toLocaleString(undefined, {maximumFractionDigits: 0});
+    }
+</script>
 
 </body>
 </html>
