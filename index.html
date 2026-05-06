@@ -14,7 +14,11 @@
 
     <script>
         async function predict() {
-            const session = await ort.InferenceSession.create('./model.onnx');
+           // const session = await ort.InferenceSession.create('./model.onnx');
+
+            const response = await fetch('./model.onnx');
+            const modelBuffer = await response.arrayBuffer();
+            const session = await ort.InferenceSession.create(modelBuffer);
             
             // Get inputs from HTML
             const dims = [1, 3];
