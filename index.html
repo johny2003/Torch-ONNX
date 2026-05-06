@@ -16,7 +16,7 @@
         async function predict() {
             try {
                 // 1. Load the model from the same folder
-                const session = await ort.InferenceSession.create('./model.onnx');
+                const session = await ort.InferenceSession.create('./final_model.onnx');
 
                 // 2. Get raw values
                 const income = parseFloat(document.getElementById('income').value);
