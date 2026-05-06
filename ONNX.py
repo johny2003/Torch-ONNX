@@ -6,11 +6,10 @@ from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 import numpy as np
 
-# 1. Load a different dataset: California Housing
+# 1. Load California Housing
 data = fetch_california_housing()
 X, y = data.data, data.target
 
-# We'll use the first 3 features to keep the HTML UI simple:
 # [MedInc, HouseAge, AveRooms]
 X = X[:, :3] 
 
