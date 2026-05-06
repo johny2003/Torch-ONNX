@@ -1,16 +1,19 @@
 <!DOCTYPE html>
-html lang="en">
+<html lang="en">
 <head>
-    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>House Price Predictor</title>
+    <style>
         body { font-family: -apple-system, sans-serif; display: flex; justify-content: center; padding: 50px; background: #f4f7f6; }
         .card { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); width: 100%; max-width: 400px; }
-        h2 { margin-top: 0; color: #333; }
+        h2 { margin-top: 0; color: #333; text-align: center; }
         .input-group { margin-bottom: 15px; }
         label { display: block; margin-bottom: 5px; font-weight: bold; color: #666; }
         input { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box; }
         button { width: 100%; padding: 12px; background: #007bff; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 16px; margin-top: 10px; }
         button:hover { background: #0056b3; }
-        #result { margin-top: 20px; font-weight: bold; font-size: 1.2em; text-align: center; color: #28a745; }
+        #result { margin-top: 20px; font-weight: bold; font-size: 1.2em; text-align: center; color: #28a745; min-height: 1.5em; }
     </style>
 </head>
 <body>
@@ -40,26 +43,24 @@ html lang="en">
 
 <script>
     function predict() {
-
         const x1 = parseFloat(document.getElementById('input1').value) || 0;
         const x2 = parseFloat(document.getElementById('input2').value) || 0;
         const x3 = parseFloat(document.getElementById('input3').value) || 0;
 
-        //output from the script
+        // PASTE YOUR NUMBERS BELOW
         const weights = [-0.42665982246398926, -0.4126211404800415, 0.36722683906555176]; 
         const bias = -0.5763885378837585;
 
-
+        // The calculation
         const rawPrediction = (x1 * weights[0]) + (x2 * weights[1]) + (x3 * weights[2]) + bias;
 
-
+        // Formatting for the display
         const finalPrice = rawPrediction * 100000; 
 
-        // 5. Display result
         if (isNaN(finalPrice)) {
             document.getElementById('result').innerText = "Please enter valid numbers.";
         } else {
-            document.getElementById('result```
+            document.getElementById('result').innerText = "Estimated Value: $" + finalPrice.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
         }
     }
 </script>
