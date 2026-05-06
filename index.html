@@ -52,8 +52,7 @@ html lang="en">
 
         const rawPrediction = (x1 * weights[0]) + (x2 * weights[1]) + (x3 * weights[2]) + bias;
 
-        // 4. Formatting (Scaling back to dollars if needed)
-        // Adjust this factor if your model outputs values in hundreds of thousands
+
         const finalPrice = rawPrediction * 100000; 
 
         // 5. Display result
@@ -61,13 +60,6 @@ html lang="en">
             document.getElementById('result').innerText = "Please enter valid numbers.";
         } else {
             document.getElementById('result```
-
-### Why this works instantly:
-*   **No Binary Files:** You don't need to upload `model.onnx` or deal with GitHub LFS anymore.
-*   **No Libraries:** You don't need to wait for `onnxruntime` to download in the browser.
-*   **Total Control:** You can see the math happening right in the `<script>` tag.
-
-Just save this, push it to your GitHub repo, and your site will be live and functional. Does the calculation show up on your screen now?').innerText = "Estimated Value: $" + finalPrice.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
         }
     }
 </script>
